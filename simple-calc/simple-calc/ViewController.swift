@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  simple-calc
 //
-//  Created by studentuser on 4/19/16.
-//  Copyright © 2016 studentuser. All rights reserved.
+//  Created by ishansaksena on 4/19/16.
+//  Copyright © 2016 ishansaksena. All rights reserved.
 //
 
 import UIKit
@@ -11,9 +11,11 @@ import UIKit
 class ViewController: UIViewController {
     
     // Numbers entered thus far
-    var numbers = [Int]()
+    var n = [Double]()
     // Whether to clear the screen the next time a number is entered
     var clearScreen = true
+    
+    var operation: String = ""
 
     @IBOutlet weak var ResultLabel: UILabel!
     
@@ -21,6 +23,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // Gray background
         self.view.backgroundColor = UIColor.grayColor()
     }
 
@@ -28,6 +31,14 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func clear(sender: UIButton) {
+        n = [Double]()
+        clearScreen = true
+        operation = ""
+        ResultLabel.text = "0.0"
+    }
+    
     
     // A number was pressed
     @IBAction func operandPressed(sender: UIButton) {
@@ -44,13 +55,16 @@ class ViewController: UIViewController {
     // An operator was pressed
     @IBAction func operatorPressed(sender: UIButton) {
         // Add number in the label if any, to the array when operator is pressed
-        numbers.append(Int(ResultLabel.text!)!)
+        n.append(Double(ResultLabel.text!)!)
         clearScreen = true
-        NSLog("\(numbers)")
+        NSLog("\(n)")
         
         // Execute operation
-        let number = sender.currentTitle!
-        switch number {
+        let oper = sender.currentTitle!
+        operation = oper
+        
+        // For debugging
+        switch oper {
         case "÷": NSLog("Division")
         case "×": NSLog("Multiply")
         case "-": NSLog("Subtract")
@@ -62,13 +76,49 @@ class ViewController: UIViewController {
         case "ln": NSLog("natural log")
         default: NSLog("No idea what's going on!!")
         }
-        
-        
     }
     
     // User presses Enter
     @IBAction func calculateResult(sender: UIButton) {
         NSLog("Enter pressed")
+        clearScreen = true
+        NSLog("\(n)")
+        n.append(Double(ResultLabel.text!)!)
+        
+        var result = 0.0
+        
+        // Calculate result and print it to the label
+        switch operation {
+        case "÷": result = n[0] / n[1]
+        case "×": result = n[0] * n[1]
+        case "-": result = n[0] - n[1]
+        case "+": result = n[0] + n[1]
+        case "!": result = Double(fact(Int(n[0])))
+        case "Count": result = Double(n.count)
+        case "AVG": result = avg(n)
+        case "sqrt": result = sqrt(n[0])
+        case "ln": result = log(n[0])
+        default: NSLog("No idea what's going on!!")
+        }
+        ResultLabel.text = "\(result)"
+    }
+    
+    // Returns the average of the numbers in the array
+    func avg(n: [Double]) -> Double {
+        var sum = 0.0
+        for number in n {
+            sum += number
+        }
+        return sum / Double(n.count)
+    }
+    
+    // Returns the factorial of the number passed in
+    func fact(number: Int) -> Int {
+        var factorial = 1
+        for index in 2...number {
+            factorial *= index
+        }
+        return factorial
     }
 }
 
