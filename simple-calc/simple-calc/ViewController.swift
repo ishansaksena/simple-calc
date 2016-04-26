@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     var clearScreen = true
     
     var operation: String = ""
+    
+    var History: [String] = []
 
     @IBOutlet weak var ResultLabel: UILabel!
     
@@ -90,17 +92,26 @@ class ViewController: UIViewController {
         // Calculate result and print it to the label
         switch operation {
         case "÷": result = n[0] / n[1]
+                History.append("\(n[0]) / \(n[1])")
         case "×": result = n[0] * n[1]
+                History.append("\(n[0]) * \(n[1])")
         case "-": result = n[0] - n[1]
+                History.append("\(n[0]) - \(n[1])")
         case "+": result = n[0] + n[1]
+                History.append("\(n[0]) + \(n[1])")
         case "!": result = Double(fact(Int(n[0])))
+                History.append("Factorial of \(n[0])")
         case "Count": result = Double(n.count)
+                History.append("Count of \(n)")
         case "AVG": result = avg(n)
-        case "sqrt": result = sqrt(n[0])
+                History.append("Average of \(n)")
         case "ln": result = log(n[0])
+                History.append("Natural Log of \(n[0])")
         default: NSLog("No idea what's going on!!")
+                History.append("Invalid Command")
         }
         ResultLabel.text = "\(result)"
+        NSLog("So far, the history is: \(History)")
     }
     
     // Returns the average of the numbers in the array
